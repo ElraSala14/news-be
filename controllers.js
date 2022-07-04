@@ -1,6 +1,6 @@
 const models = require("./models");
 const { fetchTopics } = require("./models");
-const controllers = {};
+
 
 
 exports.getTopics = (req, res) => {

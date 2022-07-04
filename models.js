@@ -1,5 +1,5 @@
 const connection = require("./db/connection");
-const models ={};
+
 
 exports.fetchTopics = () => {
     return connection.query("SELECT * FROM topics;")
