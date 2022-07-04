@@ -7,8 +7,8 @@ app.use(express.json());
 app.get("/api/topics", getTopics);
 
 app.use((err, req, res, next) =>{
-    res.status(err.status).send({ msg: err.msg});
-    next(err);
+    if (err) next(err);
+    else res.status(err.status).send({ msg: err.msg});
 });
 
 app.use((err, req, res, next) =>{
