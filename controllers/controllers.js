@@ -1,6 +1,8 @@
-const { fetchTopics, fetchArticleById } = require("../models/models")
+const { fetchTopics, fetchArticleById, updateArticleById } = require("../models/models")
 
-// 
+
+// =====================================================================
+
 exports.getTopics = (req, res, next) => {
    fetchTopics().then((result) => {
     res.status(200).send({ result });
@@ -8,6 +10,8 @@ exports.getTopics = (req, res, next) => {
           next(err);
 });
 };
+
+// ======================================================================
 
 exports.getArticleById = (req, res, next) => {
   fetchArticleById(req.params)
@@ -18,4 +22,21 @@ exports.getArticleById = (req, res, next) => {
       next(err);
     });
 };
+
+// ========================================================================
+
+exports.patchArticleById = (req, res, next) => {
+  const { article_id }= req.params;
+  console.log(article_id);
+  const articleUpdate = req.body;
+  updateArticleById(article_id, articleUpdate)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch((err) => {
+      next(err);
+    });
+};
+
+// ======================================================================
 
