@@ -23,7 +23,4 @@ exports.fetchArticleById = ({ article_id }) => {
         }
         return Promise.reject({ status: 404, msg: "The article not found" });
       })
-      .catch((err) => {
-        return Promise.reject(err);
-      });
   };

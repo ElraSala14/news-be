@@ -11,7 +11,7 @@ afterAll(() => {
 });
 
 describe("Invalid path errors", () => {
-  test("404: respond with message This path is invalid path", () => {
+  test("GET404: respond with message This path is invalid path", () => {
     return request(app)
       .get("/api/topicz")
       .expect(404)
@@ -20,7 +20,7 @@ describe("Invalid path errors", () => {
       });
   });
 });
-  describe("/api", () => {
+  describe("GET api/topics", () => {
     test("GET 200: Responds with an array of topic objects", () => {
       return request(app)
         .get("/api/topics")
@@ -41,7 +41,7 @@ describe("Invalid path errors", () => {
   });
 //
   describe("GET api/articles/:article_id", () => {
-    test("400: respond with error when article_id is not a number", () => {
+    test("GET 400: respond with error when article_id is not a number", () => {
       return request(app)
         .get("/api/articles/seven")
         .expect(400)
@@ -51,7 +51,7 @@ describe("Invalid path errors", () => {
     });
 
 
-    test("404: respond with error if the article is not found with the passed article_id", () => {
+    test("GET 404: respond with error if the article is not found with the passed article_id", () => {
       return request(app)
         .get("/api/articles/11111111")
         .expect(404)
@@ -60,7 +60,7 @@ describe("Invalid path errors", () => {
         });
     });
 
-      test("responds with an article object of given id", () => {
+      test("GET 200: responds with an article object of given id", () => {
         return request(app)
           .get("/api/articles/1")
           .expect(200)
