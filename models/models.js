@@ -30,6 +30,9 @@ exports.fetchArticleById = ({ article_id }) => {
 // =============================================================================
 
 exports.updateArticleById = (articleId, articleUpdate) => {
+  if(Object.keys(articleUpdate).length === 0) {
+      return Promise.reject({ status: 400, msg: 'inc_votes has been missed'})
+  }
   if (isNaN(+articleId)) {
     return Promise.reject({ status: 400, msg: "The article_id has to be a number" });
   }

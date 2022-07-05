@@ -115,6 +115,28 @@ describe("Invalid path errors", () => {
             expect(msg).toBe('The article is not found');
           });
   });
+  test("GET 400: respond with error when inc_votes passed a string ", () => {
+    const articleUpdate = { inc_votes: "potato" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(articleUpdate)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Bad Request");
+      });
+  });
+
+
+  test('GET 400: respond with error inc_votes missed when passed an empty object', () => {
+    const articleUpdate = {};
+    return request(app)
+    .patch("/api/articles/1")
+    .send(articleUpdate)
+    .expect(400)
+    .then(({ body: { msg } }) => {
+        expect(msg).toBe('inc_votes has been missed')
+    });
+  });
 });
 
     
