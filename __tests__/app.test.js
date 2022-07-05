@@ -10,6 +10,16 @@ afterAll(() => {
   return connection.end();
 });
 
+describe("Invalid path errors", () => {
+  test("404: respond with message This path is invalid path", () => {
+    return request(app)
+      .get("/api/topicz")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("This path is invalid");
+      });
+  });
+});
   describe("/api", () => {
     test("GET 200: Responds with an array of topic objects", () => {
       return request(app)
