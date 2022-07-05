@@ -39,3 +39,45 @@ describe("Invalid path errors", () => {
         });
     });
   });
+//
+  describe("GET api/articles/:article_id", () => {
+    test("400: respond with error when article_id is not a number", () => {
+      return request(app)
+        .get("/api/articles/seven")
+        .expect(400)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("The article_id has to be a number");
+        });
+    });
+
+
+    test("404: respond with error if the article is not found with the passed article_id", () => {
+      return request(app)
+        .get("/api/articles/11111111")
+        .expect(404)
+        .then(({ body: { msg } }) => {
+          expect(msg).toBe("The article not found");
+        });
+    });
+
+      test("responds with an article object of given id", () => {
+        return request(app)
+          .get("/api/articles/1")
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.article).toBeInstanceOf(Object);
+            expect(body.article.article_id).toEqual(1);
+            expect(body.article).toEqual(
+              expect.objectContaining({
+                article_id: expect.any(Number),
+                title: expect.any(String),
+                topic: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+              })
+            );
+          });
+        });
+  });

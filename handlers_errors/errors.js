@@ -10,6 +10,7 @@ exports.handleInvalidPath = (req, res) => {
     }
   };
   
-  exports.unhandledErr = (req, res) => {
-    res.status(500).send({ msg: "ooops something went wrong, internal server error" });
+  exports.unhandledErr = (err, req, res, next) => {
+    res.status(500).send({ msg: "ooops something went wrong, internal server err" });
+    console.log(err);
   };
