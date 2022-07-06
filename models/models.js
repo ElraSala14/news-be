@@ -47,3 +47,14 @@ exports.updateArticleById = (articleId, articleUpdate) => {
         return Promise.reject({status: 404, msg: 'The article is not found'});
     })
 }
+
+//=============================================================================
+
+exports.fetchUsers = () => {
+  return connection.query("SELECT * FROM users;")
+      .then((users) => {
+          return users.rows;  
+});
+};
+
+// ===============================================================================
