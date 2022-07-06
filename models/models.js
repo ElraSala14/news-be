@@ -43,7 +43,7 @@ exports.updateArticleById = (articleId, articleUpdate) => {
         if (result.rows.length) {
           return result.rows[0];
         }
-        return Promise.reject({status: 404, msg: 'The article is not found'});
+       return Promise.reject({status: 404, msg: 'The article is not found'});
     })
 }
 
@@ -75,15 +75,17 @@ exports.fetchArticles = () => {
 
 
 exports.fetchComments = (articleId) => {
-  if (isNaN(articleId)) {
+  if (isNaN(+articleId)) {
     return Promise.reject({ status: 400, msg: "The article_id has to be a number" });
   }
   return connection
-  .query("SELECT comment_id, votes, created_at, author, body FROM comments WHERE article_id = $1", [articleId])
+  .query("SELECT comment_id, votes, created_at, author, body, article_id FROM comments WHERE article_id = $1", [articleId])
   .then(({rows})=> {
-    if (rows.length) {
-      return rows;
-    }
-    return Promise.reject({status: 404, msg: 'The article is not found'});
+    if (rows)
+       return rows;
+    // }
+    //return Promise.reject({status: 404, msg: 'The article is not found'});
+    //return Promise.reject({status: 404, msg: 'The article does not have any comments'});
+
     });
 };
