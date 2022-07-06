@@ -219,3 +219,32 @@ describe("GET /api/articles", () => {
     });
   });
 })
+describe("GET  /api/articles/article_id/comments", () => {
+  test("GET 200: respons with comment objects inside an array", () => {
+      return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({body}) => {
+      expect(Array.isArray(body.comments)).toBe(true);
+      body.comments.forEach((comment)=> {
+       expect(comment).toEqual(
+       expect.objectContaining({
+        comment_id: expect.any(Number),
+          votes: expect.any(Number),
+          created_at: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String)
+       })
+       )
+      })
+      })
+  })
+  test("GET 404: respond with error if the article is not found with the passed article_id", () => {
+    return request(app)
+      .get("/api/articles/11111111/comments")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("The article is not found");
+      });
+  });
+})
