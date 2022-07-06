@@ -1,5 +1,6 @@
 const connection = require("../db/connection");
 
+//=============================================================================
 
 exports.fetchTopics = () => {
     return connection.query("SELECT * FROM topics;")
@@ -8,6 +9,7 @@ exports.fetchTopics = () => {
 });
 };
 
+// ===============================================================================
 
 exports.fetchArticleById = ({ article_id }) => {
     if (isNaN(+article_id)) {
@@ -21,6 +23,27 @@ exports.fetchArticleById = ({ article_id }) => {
         if (result.rows.length) {
           return result.rows[0];
         }
-        return Promise.reject({ status: 404, msg: "The article not found" });
+        return Promise.reject({ status: 404, msg: "The article is not found" });
       })
   };
+
+// =============================================================================
+
+exports.updateArticleById = (articleId, articleUpdate) => {
+  if(Object.keys(articleUpdate).length === 0) {
+      return Promise.reject({ status: 400, msg: 'inc_votes has been missed'})
+  }
+  if (isNaN(+articleId)) {
+    return Promise.reject({ status: 400, msg: "The article_id has to be a number" });
+  }
+    const { inc_votes : voteIncrement} = articleUpdate;
+    return connection.query(`UPDATE articles SET votes = votes + $1 
+            WHERE article_id = $2 
+            RETURNING *;`, [voteIncrement, articleId])
+    .then ((result) => {
+        if (result.rows.length) {
+          return result.rows[0];
+        }
+        return Promise.reject({status: 404, msg: 'The article is not found'});
+    })
+}

@@ -9,8 +9,13 @@ exports.handleInvalidPath = (req, res) => {
       next(err);
     }
   };
-  
+  exports.handlePsqlErr = (err, req, res, next) => {
+    if (err.code === "22P02") {
+      res.status(400).send({ msg: "Bad Request" });
+    } else {
+      next(err);
+    }
+  };
   exports.unhandledErr = (err, req, res, next) => {
     res.status(500).send({ msg: "ooops something went wrong, internal server err" });
-    console.log(err);
   };

@@ -56,7 +56,7 @@ describe("Invalid path errors", () => {
         .get("/api/articles/11111111")
         .expect(404)
         .then(({ body: { msg } }) => {
-          expect(msg).toBe("The article not found");
+          expect(msg).toBe("The article is not found");
         });
     });
 
@@ -81,3 +81,62 @@ describe("Invalid path errors", () => {
           });
         });
   });
+  
+  describe('PATCH /api/articles/:article_id', () => {
+    test('GET 200: responds with the articles that have been updated', () => {
+      const articleId = 1;
+      const articleUpdate = {inc_votes: -1};
+      return request(app)
+            .patch(`/api/articles/${articleId}`)
+            .send(articleUpdate)
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.article.article_id).toEqual(1);
+              expect(body.article.votes).toEqual(99);                          
+            });
+    });
+    test('GET 400: respond with error when article_id is not a number', () => {
+      const articleUpdate = {inc_votes: -1};
+      return request(app)
+            .patch("/api/articles/number")
+            .send(articleUpdate)
+            .expect(400)
+            .then(({ body: {msg} }) => {
+              expect(msg).toBe('The article_id has to be a number');
+            });
+  });
+  test('GET 404: respond with error if the article is not found with passed article_id', () => {
+    const articleUpdate = {inc_votes: -1};
+    return request(app)
+          .patch("/api/articles/1111111")
+          .send(articleUpdate)
+          .expect(404)
+          .then(({ body: {msg} }) => {
+            expect(msg).toBe('The article is not found');
+          });
+  });
+  test("GET 400: respond with error when inc_votes passed a string ", () => {
+    const articleUpdate = { inc_votes: "potato" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(articleUpdate)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toEqual("Bad Request");
+      });
+  });
+
+
+  test('GET 400: respond with error inc_votes missed when passed an empty object', () => {
+    const articleUpdate = {};
+    return request(app)
+    .patch("/api/articles/1")
+    .send(articleUpdate)
+    .expect(400)
+    .then(({ body: { msg } }) => {
+        expect(msg).toBe('inc_votes has been missed')
+    });
+  });
+});
+
+    
