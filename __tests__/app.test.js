@@ -194,4 +194,28 @@ describe("GET /api/articles", () => {
       })
     });
   })
-  })
+  test('GET 200  returnes articles sorted by date in descending order', () => {
+
+    const articleInOrderByDate = ['2020-11-03T09:12:00.000Z',
+                                  '2020-10-18T01:00:00.000Z',
+                                  '2020-10-16T05:03:00.000Z',
+                                  '2020-10-11T11:24:00.000Z',
+                                  '2020-08-03T13:14:00.000Z',
+                                  '2020-07-09T20:11:00.000Z',
+                                  '2020-06-06T09:10:00.000Z',
+                                  '2020-05-14T04:15:00.000Z',
+                                  '2020-05-06T01:14:00.000Z',
+                                  '2020-04-17T01:08:00.000Z',
+                                  '2020-01-15T22:21:00.000Z',
+                                  '2020-01-07T14:08:00.000Z'];
+    return request(app)
+    .get('/api/articles')
+    .expect(200)
+    .then(({ body }) => {
+      body.articles.forEach((article, n) => {
+        const {created_at} = article;
+          expect(created_at).toEqual(articleInOrderByDate[n]);
+      });
+    });
+  });
+})
