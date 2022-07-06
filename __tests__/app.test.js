@@ -139,4 +139,33 @@ describe("Invalid path errors", () => {
   });
 });
 
+  // get users
     
+    describe("GET api/users", () => {
+      test("GET 200: Responds with an array of users objects", () => {
+        return request(app)
+          .get("/api/users")
+          .expect(200)
+          .then(({ body }) => {
+            expect(Array.isArray(body.result)).toBe(true);
+            expect(body.result).toHaveLength(4);
+            body.result.forEach((user) => {
+              expect(user).toEqual(
+                expect.objectContaining({
+                  username: expect.any(String),
+                  name: expect.any(String),
+                  avatar_url: expect.any(String),
+                })
+              );
+            });
+          });
+      });
+      test("GET404: respond with message This path is invalid path", () => {
+        return request(app)
+          .get("/api/no-endpoint")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("This path is invalid");
+          });
+      });
+    });  
