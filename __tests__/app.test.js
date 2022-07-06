@@ -147,9 +147,9 @@ describe("Invalid path errors", () => {
           .get("/api/users")
           .expect(200)
           .then(({ body }) => {
-            expect(Array.isArray(body.result)).toBe(true);
-            expect(body.result).toHaveLength(4);
-            body.result.forEach((user) => {
+            expect(Array.isArray(body.users)).toBe(true);
+            expect(body.users).toHaveLength(4);
+            body.users.forEach((user) => {
               expect(user).toEqual(
                 expect.objectContaining({
                   username: expect.any(String),
