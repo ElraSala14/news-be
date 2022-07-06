@@ -169,3 +169,29 @@ describe("Invalid path errors", () => {
           });
       });
     });  
+
+// get articles with comment count
+
+describe("GET /api/articles", () => {
+  test("GET 200: responds with objects articles and add comment cout", () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({ body }) => {
+      expect(Array.isArray(body.articles)).toBe(true);
+        body.articles.forEach((article) =>{
+          expect(article).toEqual(
+          expect.objectContaining({
+          author: expect.any(String),
+          title: expect.any(String),
+          article_id: expect.any(Number),
+          topic: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          comment_count: expect.any(Number),
+        })
+          )
+      })
+    });
+  })
+  })
