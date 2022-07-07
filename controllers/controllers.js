@@ -1,4 +1,5 @@
-const { fetchTopics, fetchArticleById, updateArticleById, fetchUsers, fetchArticles} = require("../models/models")
+const comments = require("../db/data/test-data/comments");
+const { fetchTopics, fetchArticleById, updateArticleById, fetchUsers, fetchArticles, fetchComments} = require("../models/models")
 
 
 // =====================================================================
@@ -58,3 +59,17 @@ exports.getArticles = (req, res, next) => {
       next(err)
   })
 }
+
+//=====================================================================
+
+exports.getComments = (req, res, next) =>{
+  const articleId = req.params.article_id
+  fetchComments(articleId)
+  .then((comments) =>{
+      res.status(200).send({comments: comments})
+  })
+  .catch((err) =>{
+    next(err)
+  });
+
+};
