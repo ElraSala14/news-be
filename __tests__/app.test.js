@@ -260,4 +260,12 @@ describe("GET  /api/articles/article_id/comments", () => {
 
     })
 })
+test("GET 404: respond with error if the article is not found with the passed article_id", () => {
+  return request(app)
+    .get("/api/articles/999/comments")
+    .expect(404)
+    .then(({ body: { msg } }) => {
+      expect(msg).toBe("The article is not found");
+    });
+});
 })
