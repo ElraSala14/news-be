@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const { handleInvalidPath, handleCustomErr, handlePsqlErr, unhandledErr } = require("./handlers_errors/errors");
-const  { getTopics, getArticleById, patchArticleById, getUsers, getArticles, getComments } = require("./controllers/controllers");
+const  { getTopics, getArticleById, patchArticleById, getUsers, getArticles, getComments, postComment } = require("./controllers/controllers");
 
 app.use(express.json());
 
@@ -12,6 +12,7 @@ app.patch("/api/articles/:article_id", patchArticleById);
 app.get("/api/users", getUsers);
 app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getComments)
+app.post("/api/articles/:article_id/comments", postComment)
 
 app.use('*', handleInvalidPath);
 app.use(handleCustomErr);

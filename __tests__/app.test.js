@@ -219,6 +219,8 @@ describe("GET /api/articles", () => {
     });
   });
 })
+
+
 describe("GET  /api/articles/article_id/comments", () => {
   test('GET 400: respond with error when article_id is not a number', () => {
     return request(app)
@@ -268,4 +270,54 @@ test("GET 404: respond with error if the article is not found with the passed ar
       expect(msg).toBe("The article is not found");
     });
 });
-})
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("POST 201: responds with added comment to database if the user does exist", () => {
+    const addedComment = {username: "butter_bridge", body: "A comment has been add for the purpose of testing",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(addedComment)
+      .expect(201)
+      .then(({ body }) => {
+        expect(body.comments).toEqual({
+          article_id: 1,
+          author: "butter_bridge",
+          body: "A comment has been add for the purpose of testing",
+          comment_id: 19,
+          created_at: expect.any(String),
+          votes: 0,
+        });
+        });
+      });
+
+      test('GET 400: respond with error when article_id is not a number', () => {
+        return request(app)
+              .get("/api/articles/apple/comments")
+              .expect(400)
+              .then(({ body: {msg} }) => {
+                expect(msg).toBe('The article_id has to be a number');
+              });
+      });
+      
+      test("GET 404: respond with error if the article is not found with the passed article_id", () => {
+        return request(app)
+          .get("/api/articles/999/comments")
+          .expect(404)
+          .then(({ body: { msg } }) => {
+            expect(msg).toBe("The article is not found");
+          });
+      });
+      
+      test("GET 400: respond with error when passed body or username are invalid datatype", () => {
+        const addedComment = { username: 765766, body: 1 };
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send(addedComment)
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("Username and body have to be a string");
+          });
+      });
+  });
