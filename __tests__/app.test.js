@@ -317,7 +317,7 @@ describe("POST /api/articles/:article_id/comments", () => {
           .send(addedComment)
           .expect(400)
           .then(({ body }) => {
-            expect(body.msg).toBe("Username and body have to be a string");
+            expect(body.msg).toBe("Bad Request");
           });
       });
   });

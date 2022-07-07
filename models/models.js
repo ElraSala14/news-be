@@ -101,7 +101,7 @@ exports.addComment = (username, body, articleId) => {
     return Promise.reject({ status: 400, msg: "The article_id has to be a number" });
   }
   if (typeof username !== "string" || typeof body !== "string") {
-    return Promise.reject({ status: 400, msg: "Username and body have to be a string",
+    return Promise.reject({ status: 400, msg: "Bad Request",
     });
   }
   return connection.query(`SELECT * FROM articles WHERE article_id= $1`,[articleId])
