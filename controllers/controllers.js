@@ -77,10 +77,6 @@ exports.getComments = (req, res, next) =>{
 exports.postComment = (req, res, next) => {
   const articleId = req.params.article_id;
   const {username, body} = req.body;
-  if (!username || !body){
-    err = { ststus: 400, msg: "Bad Request"}
-    throw err;
-  }
   addComment(username, body, articleId)
     .then((comments) => {
       res.status(201).send({comments: comments});

@@ -320,4 +320,35 @@ describe("POST /api/articles/:article_id/comments", () => {
             expect(body.msg).toBe("Bad Request");
           });
       });
+      test("GET 400: respond with error if the body does not nexists in the post body", () => {
+        const addedComment = {username: "butter_bridge",};
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send(addedComment)
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("Bad Request");
+          });
+      });
+      test("GET 400: respond with error if the username does not nexists in the post body", () => {
+        const addedComment = { body: "A comment has been add for the purpose of testing",};
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send(addedComment)
+          .expect(400)
+          .then(({ body }) => {
+            expect(body.msg).toBe("Bad Request");
+          });
+      });
+
+      test("GET 404: respond with error if the username is not found with the passed username", () => {
+        const addedComment = { username: "john_stonehous", body: "as_a_test",};
+        return request(app)
+          .post("/api/articles/1/comments")
+          .send(addedComment)
+          .expect(404)
+          .then(({ body }) => {
+            expect(body.msg).toBe("The username is not found");
+          });
+      });
   });
