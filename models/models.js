@@ -86,12 +86,53 @@ exports.fetchComments = (articleId) => {
       }
    return connection.query(`SELECT * FROM articles WHERE article_id= $1`,[articleId])
      .then(({rowCount}) =>{
-      console.log(rowCount)
       if (rowCount === 0){
         return Promise.reject({status: 404, msg: 'The article is not found'});
       }
       return rows;
      })
     });
-
   };
+
+  //=======================================================
+
+exports.addComment = (username, body, articleId) => {
+  //console.log(username, body, articleId)
+  if (isNaN(+articleId)) {
+    return Promise.reject({ status: 400, msg: "The article_id has to be a number" });
+  }
+  if (typeof username !== "string" || typeof body !== "string") {
+    return Promise.reject({ status: 400, msg: "Bad Request",
+    });
+  }
+
+   if (body === undefined) {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+   }
+   if (username === undefined) {
+    return Promise.reject({ status: 400, msg: "Bad Request" });
+   }
+return connection.query(`SELECT * FROM users WHERE username= $1`,[username])
+.then(({rowCount}) =>{
+  if (rowCount === 0){
+    return Promise.reject({status: 404, msg: 'The username is not found'});
+  }
+}).then(() =>{
+  return connection.query(`SELECT * FROM articles WHERE article_id= $1`,[articleId])
+     .then(({rowCount}) =>{
+          if (rowCount === 0){
+            return Promise.reject({status: 404, msg: 'The article is not found'});
+          }
+      })
+      .then(() =>{
+            return connection.query(
+              `INSERT INTO comments (body, article_id, author, created_at, votes)
+            VALUES ($3, $1, $2, NOW(), 0) RETURNING *;`,
+              [articleId, username, body]
+            )
+            .then(({ rows }) =>{
+                 return rows[0];
+            });
+      });
+    });
+};

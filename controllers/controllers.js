@@ -1,5 +1,5 @@
 const comments = require("../db/data/test-data/comments");
-const { fetchTopics, fetchArticleById, updateArticleById, fetchUsers, fetchArticles, fetchComments} = require("../models/models")
+const { fetchTopics, fetchArticleById, updateArticleById, fetchUsers, fetchArticles, fetchComments, addComment} = require("../models/models")
 
 
 // =====================================================================
@@ -71,5 +71,17 @@ exports.getComments = (req, res, next) =>{
   .catch((err) =>{
     next(err)
   });
+};
 
+//========================================================================
+exports.postComment = (req, res, next) => {
+  const articleId = req.params.article_id;
+  const {username, body} = req.body;
+  addComment(username, body, articleId)
+    .then((comments) => {
+      res.status(201).send({comments: comments});
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
