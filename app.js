@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const { handleInvalidPath, handleCustomErr, handlePsqlErr, unhandledErr } = require("./handlers_errors/errors");
-const  { getTopics, getArticleById, patchArticleById, getUsers, getArticles, getComments, postComment, deleteComment } = require("./controllers/controllers");
+const  { getTopics, getArticleById, patchArticleById, getUsers, getArticles, getComments, postComment, deleteComment, getApi } = require("./controllers/controllers");
 
 app.use(express.json());
 
@@ -14,6 +14,7 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getComments)
 app.post("/api/articles/:article_id/comments", postComment)
 app.delete("/api/comments/:comment_id", deleteComment)
+app.get("/api", getApi);
 
 app.use('*', handleInvalidPath);
 app.use(handleCustomErr);

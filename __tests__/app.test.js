@@ -371,3 +371,16 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
     });
   });
+
+  describe("GET /api", () => {
+    test("GET 200: responds with an object of all the available endpoints", () => {
+      return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toBeInstanceOf(Object);
+          const json = require("../endpoints.json");
+          expect(body).toEqual(json);
+        });
+    });
+  });

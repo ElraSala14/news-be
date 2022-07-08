@@ -1,5 +1,6 @@
 const comments = require("../db/data/test-data/comments");
-const { fetchTopics, fetchArticleById, updateArticleById, fetchUsers, fetchArticles, fetchComments, addComment, removeComment} = require("../models/models")
+const { fetchTopics, fetchArticleById, updateArticleById, fetchUsers, fetchArticles, fetchComments, addComment, removeComment, fetchApiEndpoints} = require("../models/models")
+const apiEndpoints = require("../endpoints.json");
 
 
 // =====================================================================
@@ -97,4 +98,10 @@ exports.deleteComment = (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+};
+
+//===================================================
+
+exports.getApi = (req, res, next) => {
+  res.status(200).send(apiEndpoints);
 };
