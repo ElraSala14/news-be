@@ -352,3 +352,22 @@ describe("POST /api/articles/:article_id/comments", () => {
           });
       });
   });
+
+  describe("DELETE /api/comments/:comment_id", () => {
+    test("GET 204: deletes comment with passed the comment_id then returns no content", () => {
+      return request(app)
+        .delete("/api/comments/6")
+        .expect(204)
+        .then(({ body }) => {
+          expect(body).toEqual({});
+        });
+    });
+    test("GET 404: responds with error when the passed comment_id does not exist", () => {
+      return request(app)
+        .delete("/api/comments/9999")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toEqual("The Comment is not found");
+        });
+    });
+  });

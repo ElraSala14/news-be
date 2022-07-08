@@ -136,3 +136,15 @@ return connection.query(`SELECT * FROM users WHERE username= $1`,[username])
       });
     });
 };
+
+//===================================================================
+exports.removeComment = (comment_id) => {
+  return connection.query(`SELECT * FROM comments WHERE comment_id = $1`, [comment_id])
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({status: 404, msg: "The Comment is not found" });
+      }
+    }).then(() => {
+      return connection.query(`DELETE FROM comments WHERE comments.comment_id = $1 RETURNING *;`, [comment_id]);
+    });
+};
